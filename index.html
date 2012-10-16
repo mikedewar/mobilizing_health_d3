@@ -1,0 +1,407 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="reveal.js/css/reveal.css">
+        <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+        <style>
+            body{
+                font-family: 'Yanone Kaffeesatz', sans-serif; 
+            }
+            .reveal pre {
+                font-size:3em;
+                box-shadow:none;
+            }
+            .reveal h1 {
+                margin-bottom:1em;
+                line-height:2em;
+                font-size:5em;
+            }
+            .reveal li {
+                font-size:2em;
+                line-height:2em;
+            }
+            path {
+                fill:none;
+                stroke:gray;
+            }
+            #axes{
+                font-size:12px;
+            }
+            #mouseover{
+                font-size:12px;
+            }
+            .tip{
+                font-size:4em;
+                fill: Tomato; 
+                stroke-width:1px;
+                stroke:Gold;
+            }
+        </style>
+        <script src="d3.v2.js"></script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides"> 
+                <section>
+                    <h1>Sketching using D3.js</h1>
+                    <div>
+                        <pre>
+{
+    "name": "Mike Dewar",
+    "twitter": "@mikedewar",
+    "code": "github.com/mikedewar"
+}
+                        </pre>
+                    </div>
+                </section>
+
+
+                <section>
+                <h1>
+                    http://d3js.org
+                </h1>
+                </section>
+
+                <section>
+                    <img alt="book" src="img/d3book.jpeg"/>
+                    <h1>http://vimeo.com/35005701</h1>
+                </section>
+
+                <section>
+                    <ul style="font-size:3em">
+                        <li>d3.js is brilliant</li>
+                        <li>so is the modern browser</li>
+                    </ul>
+                    <img alt="chrome" src="img/chrome.png" />
+                    <img alt="firebug" src="img/firebug.png" />
+                </section>
+
+                <section>
+                    <img src="img/sketch.jpeg" />
+                    <h1>http://chartsnthings.tumblr.com/</h1>
+                </section>
+
+                <section>
+                    <img alt="realtime sketch" src="img/realtime.png" />
+                </section>
+
+                <section>
+                    <img alt="dataKind" src="img/datakind.png" />
+                    <img style="margin-top:4em;" alt="mobilizing health" src="img/mh.png" />
+                    <h1 style="font-size:3em;">http://datakind.org - http://mobilizinghealth.org</h1>
+                </section>
+
+                <section>
+                    <pre style="font-size:2em">
+{
+ 'case_id': '1351',
+ 'created_at': '2011-06-16 07:55:34',
+ 'external_id': '',
+ 'from_number': '9223173098',
+ 'from_person_id': '',
+ 'from_person_type': '',
+ 'gateway_status': 'Delivered',
+ 'id': '10002',
+ 'incoming': '0',
+ 'msg': '
+    Reply ACC to accept case: SUJAL RATH 
+    Child 9414830579 KO BUKAR HAI OUR 
+    AULTE HO RAHI HE DO DIN SEi
+ ',
+ 'project_id': '1',
+ 'time_delivered': '',
+ 'time_received_or_sent': '2011-02-27 09:16:01',
+ 'to_number': '9414330400',
+ 'to_person_id': '3',
+ 'to_person_type': 'Doctor',
+ 'updated_at': '2011-10-22 17:20:23'
+}
+                    </pre>
+                </section>
+
+                <section>
+                    <div style="font-size:3em; margin-top:3em; text-align:center">
+                        get data into chrome
+                    </div>
+                </section>
+
+                <!--
+                    In this section of the talk I'll just get the data into the console. We pull this off using the following:
+
+                    d3.json('mh_messages.json', function(data){d = data.slice(1,1000)})
+                -->
+
+                <section>
+                <h1>Basic Pattern</h1>
+                    <pre>
+d3.select('ul')
+    .selectAll('li')
+    .data(data)
+    .enter()
+    .append('li')
+    .text(
+        function(d){
+            return d.label
+        }
+    )
+                    </pre>
+                </section>
+
+                <section>
+                    <div style="font-size:3em; margin-top:3em; text-align:center">
+                        sketch with HTML
+                    </div>
+                </section>
+                
+                <!--
+                    In this section I will go through the basic pattern and make a long list based on the data.
+
+                    I will write the following code into the chrome dev toolkit, a method at a time and explain the console output:
+
+                        d3.select('ul')
+                            .selectAll('li')
+                            .data(d)
+                            .enter()
+                            .append('li')
+                            .text(function(d){return d.msg})
+
+                    I will then build a little histogram out of text elements, using the following code, inside of histogram_example.json:
+
+                    my_histogram = d3.layout.histogram()
+                        .value(function(d){return new Date(d.time_received_or_sent)})
+                        .bins(40)
+
+                    d3.select('ul')
+                        .selectAll('li')
+                        .data(my_histogram(d))
+                        .enter()
+                        .append('li')
+                        .text('!')
+                        .style('font-size', function(x){return x.y*2})
+
+                -->
+
+                <section>
+                    <div style="font-size:3em; margin-top:3em; text-align:center">
+                        sketch with SVG
+                    </div>
+                </section>
+
+                <!-- 
+                In this section I'll go through the same histogram, except this time we'll use SVG to lay out the elements.
+                This example goes into circles_example.html, which has an SVG element waiting for us, and I've put the dates
+                into a nice little array.
+
+                d3.select('svg')
+                    .selectAll('circle')
+                    .data(time_bins)
+                    .enter()
+                    .append('circle')
+
+                var circles = d3.selectAll('circle')
+
+                circles.attr('cx', function(x){return (x.x - min_time)/30000000 })
+                circles.attr('cy', function(x){return x.y})
+                circles.attr('r', 6)
+
+                .. notice that the circles are upside down
+                circles.attr('cy', function(x){return 600-x.y})
+            
+                -->
+
+                <section>
+                    <svg id="scales" width=800 height=200>
+                    </svg>
+                    <script>
+d3.json('mh_messages.json',function(data){
+    var times = data.map(function(d){return new Date(d.time_received_or_sent)})
+    var my_histogram = d3.layout.histogram().bins(200);
+    time_bins = my_histogram(times);
+    Y = time_bins.map(function(x){return x.y})
+    min_time = d3.min(times)
+    max_time = d3.max(times)
+    time_scale = d3.time.scale().domain([min_time, max_time]).range([10,790])
+    value_scale = d3.scale.linear().domain([d3.min(Y), d3.max(Y)]).range([190,10])
+    d3.select('#scales').selectAll('circle').data(time_bins).enter().append('circle')
+        .attr('cx',function(d){return time_scale(d.x)})
+        .attr('cy', function(d){return value_scale(d.y)})
+        .attr('r', 5)
+})
+                </script>
+                <pre style="font-size:2em; margin-top:1em">
+time_scale = d3.time.scale()
+    .domain([min_time, max_time])
+    .range([10,790])
+
+value_scale = d3.scale.linear()
+    .domain([d3.min(Y), d3.max(Y)])
+    .range([190,10])
+
+circles
+    .attr('cx',function(d){return time_scale(d.x)})
+    .attr('cy', function(d){return value_scale(d.y)})
+                </pre>
+                </section>
+
+
+                <section>
+                    <svg id="axes" width=800 height=200>
+                    </svg>
+                    <script>
+d3.json('mh_messages.json',function(data){
+    var times = data.map(function(d){return new Date(d.time_received_or_sent)})
+    var my_histogram = d3.layout.histogram().bins(200);
+    time_bins = my_histogram(times);
+    Y = time_bins.map(function(x){return x.y})
+    min_time = d3.min(times)
+    max_time = d3.max(times)
+    time_scale = d3.time.scale().domain([min_time, max_time]).range([30,890])
+    value_scale = d3.scale.linear().domain([d3.min(Y), d3.max(Y)]).range([170,10])
+    xAxis = d3.svg.axis().scale(time_scale)
+    yAxis = d3.svg.axis().scale(value_scale).orient("left")
+    
+    svg = d3.select('#axes')
+    
+    svg.selectAll('circle').data(time_bins).enter().append('circle')
+        .attr('cx',function(d){return time_scale(d.x)})
+        .attr('cy', function(d){return value_scale(d.y)})
+        .attr('r', 5)
+
+    svg.append("svg:g")
+        .attr("class", "xaxis")
+        .attr("transform","translate(0,170)")
+        .call(xAxis)
+                
+    svg.append("svg:g")
+        .attr("class", "yaxis")
+        .attr("transform", "translate(30,0)")
+        .call(yAxis)
+
+})
+                </script>
+
+                <pre style="font-size:2em; margin-top:1em">
+xAxis = d3.svg.axis().scale(time_scale)
+svg.append("svg:g")
+    .attr("class", "xaxis")
+    .attr("transform","translate(0,170)")
+    .call(xAxis)
+
+yAxis = d3.svg.axis().scale(value_scale)
+    .orient("left")
+svg.append("svg:g")
+    .attr("class", "yaxis")
+    .attr("transform", "translate(30,0)")
+    .call(yAxis)
+                </pre>
+                </section>
+
+
+                <section>
+                    <svg id="mouseover" width=800 height=200>
+                    </svg>
+                    <script>
+d3.json('mh_messages.json',function(data){
+    var times = data.map(function(d){return new Date(d.time_received_or_sent)})
+    var my_histogram = d3.layout.histogram().bins(200);
+    time_bins = my_histogram(times);
+    Y = time_bins.map(function(x){return x.y})
+    min_time = d3.min(times)
+    max_time = d3.max(times)
+    time_scale = d3.time.scale().domain([min_time, max_time]).range([30,890])
+    value_scale = d3.scale.linear().domain([d3.min(Y), d3.max(Y)]).range([170,10])
+    xAxis = d3.svg.axis().scale(time_scale)
+    yAxis = d3.svg.axis().scale(value_scale).orient("left")
+    
+    var svg = d3.select('#mouseover')
+    
+    var circles = svg.selectAll('circle')
+    
+    circles.data(time_bins).enter().append('circle')
+        .attr('cx',function(d){return time_scale(d.x)})
+        .attr('cy', function(d){return value_scale(d.y)})
+        .attr('r', 5)
+        .on('mouseover', function(d){
+            svg.append('text')
+                .attr("x", time_scale(d.x) + 5)
+                .attr("y", value_scale(d.y) + 5)
+                .text(d.y)
+                .attr('class','tip')
+        })
+
+    svg.append("svg:g")
+        .attr("class", "xaxis")
+        .attr("transform","translate(0,170)")
+        .call(xAxis)
+                
+    svg.append("svg:g")
+        .attr("class", "yaxis")
+        .attr("transform", "translate(30,0)")
+        .call(yAxis)
+
+})
+                </script>
+                <pre style="font-size:2em; margin-top:1em">
+circles.on('mouseover', function(d){
+    svg.append('text')
+        .attr("x", time_scale(d.x) + 5)
+        .attr("y", value_scale(d.y) + 5)
+        .text(d.y)
+        .attr('class','tip')
+})
+                </pre>
+                </section>
+
+
+
+                <section>
+                    <div style="font-size:3em; margin-top:3em; text-align:center">
+                        <ul style="font-size: 0.5em; line-height:0.5em">
+                            <li>d3js.org</li>
+                            <li>www.jeromecukier.net</li>
+                            <li>alignedleft.com</li>
+                            <li>developer.mozilla.org</li>
+                            <li>Javascript: the good bits, by Douglas Crockford</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <script src="reveal.js/lib/js/head.min.js"></script>
+        <script src="reveal.js/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                // Display controls in the bottom right corner
+                controls: false,
+
+                // Display a presentation progress bar
+                progress: true,
+
+                // Push each slide change to the browser history
+                history: false,
+
+                // Enable keyboard shortcuts for navigation
+                keyboard: true,
+
+                // Enable the slide overview mode
+                overview: true,
+
+                // Loop the presentation
+                loop: false,
+
+                // Number of milliseconds between automatically proceeding to the 
+                // next slide, disabled when set to 0
+                autoSlide: 0,
+
+                // Enable slide navigation via mouse wheel
+                mouseWheel: true,
+
+                // Apply a 3D roll to links on hover
+                rollingLinks: true,
+
+                // Transition style
+                transition: 'linear' // default/cube/page/concave/linear(2d)
+            });
+        </script>
+    </body>
+</html>

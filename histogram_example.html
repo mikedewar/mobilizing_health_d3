@@ -1,15 +1,9 @@
 <html>
     <head>
-        <title>list test</title>
         <style>
-            body {
-                background-color: 009B95;
-                color: FFFC00;
-            }
             li {
                 display: inline;
                 list-style-type: none;
-                font-family: palatino;
                 padding-right: 30px;
             }
             div.container {
@@ -17,7 +11,9 @@
                 margin-top:200px;
             }
         </style>
-        <script src="http://d3js.org/d3.v2.js"></script>
+        <script src="d3.v2.js"></script>
+        <script>
+            d3.json('mh_messages.json',function(data){d=data})
     </head>
     <body>
         <div class="container">

@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <script src="http://d3js.org/d3.v2.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+        <script>
+            var time_bins;
+            var min_time;
+            d3.json('mh_messages.json',function(data){
+                times = data.map(function(d){return new Date(d.time_received_or_sent)});
+                var my_histogram = d3.layout.histogram().bins(200);
+                time_bins = my_histogram(times);
+                min_time = d3.min(times)
+            })
+        </script>
+    </head>
+    <body>
+        <svg width=1024 height=600>
+        </svg>
+    </body>
+</html>
