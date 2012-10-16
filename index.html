@@ -44,11 +44,12 @@
                 <section>
                     <h1>Sketching using D3.js</h1>
                     <div>
-                        <pre>
+                        <pre style="font-size:2.8em;">
 {
     "name": "Mike Dewar",
     "twitter": "@mikedewar",
-    "code": "github.com/mikedewar"
+    "code": "github.com/mikedewar",
+    "talk": "/mobilizing_health_d3"
 }
                         </pre>
                     </div>
@@ -119,6 +120,21 @@
                 </section>
 
                 <section>
+                <h2>Micha's Golden Rule:</h2>
+                <h1>Never Store Data in JSON Keys</h1>
+                </section>
+
+
+                <section>
+                    <ul style="font-size: 1.5em; line-height:0.5em">
+                    <li>get data into chrome</li>
+                    <li>make a list of messages</li>
+                    <li>text-based histogram</li>
+                    <li>a time series graph</li>
+                    </ul>
+                </section>
+
+                <section>
                     <div style="font-size:3em; margin-top:3em; text-align:center">
                         get data into chrome
                     </div>
@@ -148,7 +164,7 @@ d3.select('ul')
 
                 <section>
                     <div style="font-size:3em; margin-top:3em; text-align:center">
-                        sketch with HTML
+                        make a list
                     </div>
                 </section>
                 
@@ -163,8 +179,16 @@ d3.select('ul')
                             .enter()
                             .append('li')
                             .text(function(d){return d.msg})
-
-                    I will then build a little histogram out of text elements, using the following code, inside of histogram_example.json:
+                --!>
+                
+                <section>
+                    <div style="font-size:3em; margin-top:3em; text-align:center">
+                        make a text histogram
+                    </div>
+                </section>
+                
+                <!--
+                    I will then build a little histogram out of text elements, using the following code, inside of histogram_example.json, which already has the data loaded into it:
 
                     my_histogram = d3.layout.histogram()
                         .value(function(d){return new Date(d.time_received_or_sent)})
@@ -182,7 +206,7 @@ d3.select('ul')
 
                 <section>
                     <div style="font-size:3em; margin-top:3em; text-align:center">
-                        sketch with SVG
+                        make a time series graph
                     </div>
                 </section>
 
@@ -254,7 +278,7 @@ d3.json('mh_messages.json',function(data){
     Y = time_bins.map(function(x){return x.y})
     min_time = d3.min(times)
     max_time = d3.max(times)
-    time_scale = d3.time.scale().domain([min_time, max_time]).range([30,890])
+    time_scale = d3.time.scale().domain([min_time, max_time]).range([40,890])
     value_scale = d3.scale.linear().domain([d3.min(Y), d3.max(Y)]).range([170,10])
     xAxis = d3.svg.axis().scale(time_scale)
     yAxis = d3.svg.axis().scale(value_scale).orient("left")
@@ -273,7 +297,7 @@ d3.json('mh_messages.json',function(data){
                 
     svg.append("svg:g")
         .attr("class", "yaxis")
-        .attr("transform", "translate(30,0)")
+        .attr("transform", "translate(40,0)")
         .call(yAxis)
 
 })
@@ -290,7 +314,7 @@ yAxis = d3.svg.axis().scale(value_scale)
     .orient("left")
 svg.append("svg:g")
     .attr("class", "yaxis")
-    .attr("transform", "translate(30,0)")
+    .attr("transform", "translate(40,0)")
     .call(yAxis)
                 </pre>
                 </section>
@@ -351,16 +375,31 @@ circles.on('mouseover', function(d){
                 </pre>
                 </section>
 
-
+<!-- 
+d3.selectAll('circle').on('mouseout',function(){d3.selectAll('.tip').remove())
+d3.selectAll('circle').on('mouseout',function(){d3.selectAll('.tip').transition().style('opacity',0).remove())
+-->
+                <section>
+                    <div style="margin-top:3em; text-align:center">
+                        <ul style="font-size: 1.5em; line-height:0.5em">
+                            <li>d3 is a javascript library by mike bostock</li>
+                            <li>the browser is a great tool to work in</li>
+                            <li>select - selectAll - data - enter - append</li>
+                            <li>modify attributes, style and text</li>
+                            <li>events and transtions</li>
+                        </ul>
+                    </div>
+                </section>
 
                 <section>
-                    <div style="font-size:3em; margin-top:3em; text-align:center">
-                        <ul style="font-size: 0.5em; line-height:0.5em">
+                    <div style="margin-top:0em; text-align:center">
+                        <ul style="font-size: 1.5em; line-height:0.5em">
                             <li>d3js.org</li>
                             <li>www.jeromecukier.net</li>
                             <li>alignedleft.com</li>
                             <li>developer.mozilla.org</li>
                             <li>Javascript: the good bits, by Douglas Crockford</li>
+                            <li>github.com/mikedewar/d3py</li>
                         </ul>
                     </div>
                 </section>
